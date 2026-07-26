@@ -129,6 +129,12 @@
   /* ---------- single wide product card (Robusta / Blend) ---------- */
   .single-grid{display:flex;flex-direction:column;gap:14px}
   .single-card{background:var(--card);border:1px solid var(--line-soft);border-radius:18px;padding:20px}
+  .single-card.clickable{cursor:pointer;position:relative;transition:transform .2s ease,box-shadow .2s ease}
+  .single-card.clickable:active{transform:scale(.98)}
+  .single-card.clickable:hover{box-shadow:0 6px 18px rgba(30,20,10,.1)}
+  .single-card.clickable .prod-tap-hint{position:absolute;top:16px;right:16px;width:24px;height:24px;border-radius:50%;background:rgba(181,98,44,.12);display:flex;align-items:center;justify-content:center}
+  .single-card.clickable .prod-tap-hint svg{width:12px;height:12px;fill:var(--copper)}
+  .single-card .prod-thumb{margin-bottom:14px}
   .sc-icon{width:44px;height:44px;border-radius:50%;background:rgba(181,98,44,.12);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:10px}
   .sc-name{font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin:0 0 2px}
   .sc-variety{font-size:11.5px;color:var(--muted);margin:0 0 10px}
@@ -306,6 +312,50 @@
   @media(min-width:1180px){
     .page{margin:0 auto}
   }
+
+  /* ---------- Product modal (kemasan + pilih ukuran) ---------- */
+  .prod-card.clickable{cursor:pointer;position:relative;transition:transform .2s ease,box-shadow .2s ease}
+  .prod-card.clickable:active{transform:scale(.98)}
+  .prod-card.clickable:hover{box-shadow:0 6px 18px rgba(30,20,10,.1)}
+  .prod-card.clickable .prod-tap-hint{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:50%;background:rgba(181,98,44,.12);display:flex;align-items:center;justify-content:center}
+  .prod-card.clickable .prod-tap-hint svg{width:12px;height:12px;fill:var(--copper)}
+  .prod-thumb{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:10px;margin-bottom:2px}
+
+  .pm-overlay{position:fixed;inset:0;z-index:400;background:rgba(30,20,10,.55);backdrop-filter:blur(2px);display:none;align-items:flex-end;justify-content:center}
+  .pm-overlay.open{display:flex}
+  .pm-sheet{background:var(--bg);width:100%;max-width:520px;border-radius:22px 22px 0 0;max-height:92vh;overflow-y:auto;padding:0 0 26px;transform:translateY(100%);transition:transform .34s cubic-bezier(.22,1,.36,1);position:relative}
+  .pm-overlay.open .pm-sheet{transform:translateY(0)}
+  .pm-close{position:sticky;top:14px;margin:0 16px 0 auto;width:34px;height:34px;border-radius:50%;border:1px solid var(--line-soft);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:16px;z-index:2}
+  .pm-media{margin:-34px 20px 0;border-radius:18px;overflow:hidden;border:1px solid var(--line-soft);background:var(--card);position:relative}
+  .pm-gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-ms-overflow-style:none;scrollbar-width:none}
+  .pm-gallery::-webkit-scrollbar{display:none}
+  .pm-gallery img{flex:0 0 100%;width:100%;scroll-snap-align:start;display:block;aspect-ratio:4/5;object-fit:cover}
+  .pm-dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px}
+  .pm-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55);border:1px solid rgba(30,20,10,.2)}
+  .pm-dot.active{background:var(--copper)}
+  .pm-body{padding:18px 22px 0}
+  .pm-badge{display:inline-block;background:rgba(181,98,44,.12);color:var(--copper-dark);font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;margin-bottom:8px}
+  .pm-title{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin:0 0 4px}
+  .pm-sub{font-size:12px;color:var(--muted);margin:0 0 14px}
+  .pm-flavor{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+  .pm-label{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--copper-dark);margin-bottom:10px}
+  .pm-sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+  .pm-size-btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:10px 6px;text-align:center;font-weight:700}
+  .pm-size-btn .pm-size-g{display:block;font-size:13.5px}
+  .pm-size-btn .pm-size-p{display:block;font-size:11px;color:var(--muted);margin-top:2px;font-weight:600}
+  .pm-size-btn.active{background:var(--ink);border-color:var(--ink)}
+  .pm-size-btn.active .pm-size-g{color:var(--cream)}
+  .pm-size-btn.active .pm-size-p{color:rgba(243,236,221,.7)}
+  .pm-opts{display:grid;gap:8px;margin-bottom:18px}
+  .pm-opts.cols2{grid-template-columns:repeat(2,1fr)}
+  .pm-opts.cols4{grid-template-columns:repeat(4,1fr)}
+  .pm-opt-btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:9px 6px;text-align:center;font-weight:700;font-size:12.5px}
+  .pm-opt-btn.active{background:var(--copper);border-color:var(--copper);color:#fff}
+  .pm-price-row{display:flex;align-items:baseline;justify-content:space-between;padding:14px 0;border-top:1px solid var(--line-soft);margin-bottom:16px}
+  .pm-price-num{font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--copper)}
+  .pm-price-lbl{font-size:11px;color:var(--muted)}
+  .pm-order-btn{width:100%;background:var(--sage);color:#fff;padding:14px 20px;font-size:13.5px;font-weight:800;border:none;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:8px}
+  .pm-order-btn svg{fill:#fff;width:17px;height:17px}
 </style>
 </head>
 <body>
@@ -408,6 +458,55 @@
     </div>
   </section>
 
+  <!-- PRODUCT MODAL: kemasan + pilih ukuran + pesan via WA -->
+  <div class="pm-overlay" id="pmOverlay" onclick="if(event.target===this) closeProductModal()">
+    <div class="pm-sheet">
+      <button class="pm-close" onclick="closeProductModal()">✕</button>
+      <div class="pm-media">
+        <div class="pm-gallery" id="pmGallery" onscroll="updateGalleryDots()">
+          
+          
+        </div>
+        <div class="pm-dots" id="pmDots">
+          <span class="pm-dot active"></span><span class="pm-dot"></span>
+        </div>
+      </div>
+      <div class="pm-body">
+        <span class="pm-badge">Roasted Bean · Arabica</span>
+        <h3 class="pm-title">Fullwash</h3>
+        <p class="pm-sub">Puntang · Haruman · Malabar — Whole Bean / Ground</p>
+        <div class="pm-flavor">
+          <span class="flavor-tag">Jasmine</span><span class="flavor-tag">Lemon</span><span class="flavor-tag">Crisp Finish</span>
+        </div>
+        <p class="pm-label">Pilih Ukuran</p>
+        <div class="pm-sizes" id="pmSizes">
+          <button class="pm-size-btn" data-grams="250" data-price="80000" onclick="selectSize(this)"><span class="pm-size-g">250g</span><span class="pm-size-p">Rp80.000</span></button>
+          <button class="pm-size-btn active" data-grams="500" data-price="160000" onclick="selectSize(this)"><span class="pm-size-g">500g</span><span class="pm-size-p">Rp160.000</span></button>
+          <button class="pm-size-btn" data-grams="1000" data-price="320000" onclick="selectSize(this)"><span class="pm-size-g">1kg</span><span class="pm-size-p">Rp320.000</span></button>
+        </div>
+        <p class="pm-label">Bentuk</p>
+        <div class="pm-opts cols2" id="pmForm">
+          <button class="pm-opt-btn active" data-form="Biji Utuh" onclick="selectOpt(this,'pmForm')">Biji Utuh</button>
+          <button class="pm-opt-btn" data-form="Bubuk" onclick="selectOpt(this,'pmForm')">Bubuk</button>
+        </div>
+        <p class="pm-label">Level Roasting</p>
+        <div class="pm-opts cols4" id="pmRoast">
+          <button class="pm-opt-btn" data-roast="Light" onclick="selectOpt(this,'pmRoast')">Light</button>
+          <button class="pm-opt-btn active" data-roast="Medium" onclick="selectOpt(this,'pmRoast')">Medium</button>
+          <button class="pm-opt-btn" data-roast="Medium-Dark" onclick="selectOpt(this,'pmRoast')">Med-Dark</button>
+          <button class="pm-opt-btn" data-roast="Dark" onclick="selectOpt(this,'pmRoast')">Dark</button>
+        </div>
+        <div class="pm-price-row">
+          <div><p class="pm-price-num" id="pmPriceNum">Rp160.000</p><p class="pm-price-lbl">500g · Fullwash Roasted Bean</p></div>
+        </div>
+        <button class="pm-order-btn" onclick="orderViaWhatsApp()">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm5.6 14.3c-.2.6-1.3 1.2-1.8 1.3-.5.1-1 .1-3.3-.7-2.8-1-4.6-3.9-4.8-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 .9-2.3c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.7.8 1.8.1.2.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.1.1-.3.3-.1.6.2.3.9 1.4 1.9 2.3 1.3 1.1 2.4 1.5 2.7 1.7.3.1.5.1.7-.1.2-.2.7-.8.9-1.1.2-.3.4-.2.6-.1.2.1 1.5.7 1.8.8.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
+          Pesan via WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- PRODUK -->
   <section id="produk">
     <p class="s-label center rv">Katalog Produk</p>
@@ -471,28 +570,36 @@
         <p class="cat-sub">Biji kopi Arabica yang telah di-roast dengan profil medium–light roast. Siap seduh untuk espresso, pour-over, French press, atau metode apapun pilihan Anda.</p>
         <p class="cat-note">📦 Per 1 kg · Freshly roasted · Degassing 24–48 jam — 💡 Best consumed within 30 days of roast date untuk rasa optimal</p>
         <div class="prod-grid">
-          <div class="prod-card rv">
+          <div class="prod-card clickable rv" onclick="openProductModal('fullwash-roasted')">
+            <span class="prod-tap-hint"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></span>
+            <img class="prod-thumb" src="foto/fulwash.jpg" alt="Kemasan Fullwash Roasted Bean">
             <p class="prod-num">05 / ARABICA ROASTED</p>
             <p class="prod-process">Fullwash</p>
             <p class="prod-variety">Arabica · Roasted Bean</p>
             <div class="prod-flavor"><span class="flavor-tag">Jasmine</span><span class="flavor-tag">Lemon</span><span class="flavor-tag">Crisp Finish</span></div>
             <div class="prod-price-row"><div><p class="prod-price">320k</p><p class="prod-unit">per kg</p></div><span class="best-badge">Classic</span></div>
           </div>
-          <div class="prod-card rv">
+          <div class="prod-card clickable rv" onclick="openProductModal('honey-roasted')">
+            <span class="prod-tap-hint"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></span>
+            <img class="prod-thumb" src="foto/honey.jpg" alt="Kemasan Honey Roasted Bean">
             <p class="prod-num">06 / ARABICA ROASTED</p>
             <p class="prod-process">Honey</p>
             <p class="prod-variety">Arabica · Roasted Bean</p>
             <div class="prod-flavor"><span class="flavor-tag">Honey</span><span class="flavor-tag">Mango</span><span class="flavor-tag">Smooth</span></div>
             <div class="prod-price-row"><div><p class="prod-price">350k</p><p class="prod-unit">per kg</p></div><span class="best-badge">Best Seller</span></div>
           </div>
-          <div class="prod-card rv">
+          <div class="prod-card clickable rv" onclick="openProductModal('natural-roasted')">
+            <span class="prod-tap-hint"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></span>
+            <img class="prod-thumb" src="foto/natural.jpg" alt="Kemasan Natural Roasted Bean">
             <p class="prod-num">07 / ARABICA ROASTED</p>
             <p class="prod-process">Natural</p>
             <p class="prod-variety">Arabica · Roasted Bean</p>
             <div class="prod-flavor"><span class="flavor-tag">Strawberry</span><span class="flavor-tag">Chocolate</span><span class="flavor-tag">Rich Body</span></div>
             <div class="prod-price-row"><div><p class="prod-price">370k</p><p class="prod-unit">per kg</p></div><span class="best-badge">Specialty</span></div>
           </div>
-          <div class="prod-card rv">
+          <div class="prod-card clickable rv" onclick="openProductModal('wine-roasted')">
+            <span class="prod-tap-hint"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></span>
+            <img class="prod-thumb" src="foto/wine.jpg" alt="Kemasan Wine Roasted Bean">
             <p class="prod-num">08 / ARABICA ROASTED</p>
             <p class="prod-process">Wine</p>
             <p class="prod-variety">Arabica · Roasted Bean</p>
@@ -514,7 +621,9 @@
           <div class="prod-flavor" style="margin-bottom:12px"><span class="flavor-tag">Earthy</span><span class="flavor-tag">Nutty</span><span class="flavor-tag">High Caffeine</span></div>
           <p class="sc-price">85k</p><p class="sc-per">per kg</p>
         </div>
-        <div class="single-card rv">
+        <div class="single-card clickable rv" onclick="openProductModal('robusta-roasted')">
+          <span class="prod-tap-hint"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></span>
+          <img class="prod-thumb" src="foto/robusta.jpg" alt="Kemasan Robusta Roasted Bean">
           <div class="sc-icon">🔥</div>
           <h3 class="sc-name">Robusta Roasted Bean</h3>
           <p class="sc-variety">Robusta · Roasted Bean</p>
@@ -529,9 +638,11 @@
     <div class="tab-panel" id="tab-blend">
 
       <!-- MAIN BLEND CARD -->
-      <div class="single-card rv" style="border-color:var(--copper);margin-bottom:16px">
+      <div class="single-card clickable rv" style="border-color:var(--copper);margin-bottom:16px" onclick="openProductModal('house-blend')">
+        <span class="prod-tap-hint"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg></span>
+        <img class="prod-thumb" src="foto/house_blend.jpg" alt="Kemasan House Blend">
         <div class="sc-icon" style="background:rgba(181,98,44,.18);font-size:24px">✨</div>
-        <h3 class="sc-name">Host Blend</h3>
+        <h3 class="sc-name">House Blend</h3>
         <p class="sc-variety">Special House Blend · Roasted</p>
 
         <div style="margin:14px 0;padding:14px 16px;border:1px solid var(--copper);border-radius:12px;background:rgba(181,98,44,.06)">
@@ -716,8 +827,8 @@
         <p class="oc-desc">Kopi Puntang dari Bandung Selatan dikenal dengan keasaman cerah, rasa buah-buahan segar, dan aftertaste manis yang panjang — salah satu specialty terbaik Jawa Barat.</p>
       </div>
       <div class="origin-card rv">
-        <p class="oc-flag">🌄</p><p class="oc-region">Gunung Haruman, Garut</p><p class="oc-type">Arabica · 1300–1700 mdpl</p>
-        <p class="oc-desc">Gunung Haruman menghasilkan biji Arabica dengan profil floral yang khas, body medium, dan sweetness alami dari tanah vulkanik subur Garut selatan.</p>
+        <p class="oc-flag">🌄</p><p class="oc-region">Gunung Haruman, Bandung</p><p class="oc-type">Arabica · 1300–1700 mdpl</p>
+        <p class="oc-desc">Gunung Haruman menghasilkan biji Arabica dengan profil floral yang khas, body medium, dan sweetness alami dari tanah vulkanik subur Bandung selatan.</p>
       </div>
       <div class="origin-card rv">
         <p class="oc-flag">🏔️</p><p class="oc-region">Gunung Malabar, Bandung</p><p class="oc-type">Arabica · 1500–2321 mdpl</p>
@@ -856,6 +967,144 @@ const rvObs = new IntersectionObserver((entries) => {
   });
 }, {threshold:.12});
 rvEls.forEach(el => rvObs.observe(el));
+
+
+const productImages = {
+  'fullwash-roasted': ['foto/fulwash.jpg','foto/fulwash-label.jpg'],
+  'honey-roasted': ['foto/honey.jpg'],
+  'natural-roasted': ['foto/natural.jpg'],
+  'wine-roasted': ['foto/wine.jpg'],
+  'robusta-roasted': ['foto/robusta.jpg'],
+  'house-blend': ['foto/house_blend.jpg']
+};
+
+// ---------- Product modal (klik kartu produk untuk lihat kemasan & pesan) ----------
+const productData = {
+  'fullwash-roasted': {
+    name: 'Fullwash',
+    badge: 'Roasted Bean · Arabica',
+    sub: 'Puntang · Haruman · Malabar — Whole Bean / Ground',
+    flavors: ['Jasmine','Lemon','Crisp Finish'],
+    sizes: [{g:250,p:80000},{g:500,p:160000},{g:1000,p:320000}]
+  },
+  'honey-roasted': {
+    name: 'Honey',
+    badge: 'Roasted Bean · Arabica',
+    sub: 'Puntano · Harualan · Malabar — Whole Bean / Ground',
+    flavors: ['Honey','Mango','Smooth'],
+    sizes: [{g:250,p:87500},{g:500,p:175000},{g:1000,p:350000}]
+  },
+  'natural-roasted': {
+    name: 'Natural',
+    badge: 'Roasted Bean · Arabica',
+    sub: 'Puntano · Harualan · Malabar — Whole Bean / Ground',
+    flavors: ['Strawberry','Chocolate','Rich Body'],
+    sizes: [{g:250,p:92500},{g:500,p:185000},{g:1000,p:370000}]
+  },
+  'wine-roasted': {
+    name: 'Wine',
+    badge: 'Roasted Bean · Arabica',
+    sub: 'Puntano · Harualan · Malabar — Whole Bean / Ground',
+    flavors: ['Fermented','Red Wine','Intense'],
+    sizes: [{g:250,p:100000},{g:500,p:200000},{g:1000,p:400000}]
+  },
+  'robusta-roasted': {
+    name: 'Robusta Roasted Bean',
+    badge: 'Roasted Bean · Robusta',
+    sub: 'Robusta · Medium-Dark Roast — Whole Bean / Ground',
+    flavors: ['Smoky','Bold','Thick Crema'],
+    sizes: [{g:250,p:40000},{g:500,p:80000},{g:1000,p:160000}]
+  },
+  'house-blend': {
+    name: 'House Blend',
+    badge: 'Signature Blend · 30:70',
+    sub: '30% Arabica · 70% Robusta — Whole Bean / Ground',
+    flavors: ['Balanced','Caramel','Smooth Body'],
+    sizes: [{g:250,p:50000},{g:500,p:100000},{g:1000,p:200000}]
+  }
+};
+
+let currentProduct = null;
+
+function fmtRp(n){ return 'Rp' + n.toLocaleString('id-ID'); }
+
+function openProductModal(id) {
+  currentProduct = productData[id];
+  currentProduct.id = id;
+
+  document.querySelector('.pm-badge').textContent = currentProduct.badge;
+  document.querySelector('.pm-title').textContent = currentProduct.name;
+  document.querySelector('.pm-sub').textContent = currentProduct.sub;
+
+  const flavorWrap = document.querySelector('.pm-flavor');
+  flavorWrap.innerHTML = currentProduct.flavors.map(f => `<span class="flavor-tag">${f}</span>`).join('');
+
+  const gallery = document.getElementById('pmGallery');
+  const images = productImages[id] || [];
+  gallery.innerHTML = images.map(src => `<img src="${src}" alt="${currentProduct.name}">`).join('');
+  gallery.scrollLeft = 0;
+  const dotsWrap = document.getElementById('pmDots');
+  dotsWrap.innerHTML = images.map((_, i) => `<span class="pm-dot${i===0?' active':''}"></span>`).join('');
+
+  const sizesWrap = document.getElementById('pmSizes');
+  sizesWrap.innerHTML = currentProduct.sizes.map((s, i) => {
+    const label = s.g >= 1000 ? (s.g/1000) + 'kg' : s.g + 'g';
+    return `<button class="pm-size-btn${i===1?' active':''}" data-grams="${s.g}" data-price="${s.p}" onclick="selectSize(this)"><span class="pm-size-g">${label}</span><span class="pm-size-p">${fmtRp(s.p)}</span></button>`;
+  }).join('');
+
+  document.querySelectorAll('#pmForm .pm-opt-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+  document.querySelectorAll('#pmRoast .pm-opt-btn').forEach((b,i) => b.classList.toggle('active', i===1));
+
+  const mid = currentProduct.sizes[1];
+  const midLabel = mid.g >= 1000 ? (mid.g/1000) + 'kg' : mid.g + 'g';
+  document.getElementById('pmPriceNum').textContent = fmtRp(mid.p);
+  document.querySelector('.pm-price-lbl').textContent = midLabel + ' · ' + currentProduct.name + ' Roasted Bean';
+
+  document.getElementById('pmOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeProductModal() {
+  document.getElementById('pmOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function selectSize(btn) {
+  document.querySelectorAll('#pmSizes .pm-size-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const grams = btn.dataset.grams;
+  const price = parseInt(btn.dataset.price);
+  const label = grams >= 1000 ? (grams / 1000) + 'kg' : grams + 'g';
+  document.getElementById('pmPriceNum').textContent = 'Rp' + price.toLocaleString('id-ID');
+  document.querySelector('.pm-price-lbl').textContent = label + ' · Fullwash Roasted Bean';
+}
+function selectOpt(btn, groupId) {
+  document.querySelectorAll('#' + groupId + ' .pm-opt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function updateGalleryDots() {
+  const gallery = document.getElementById('pmGallery');
+  const idx = Math.round(gallery.scrollLeft / gallery.clientWidth);
+  document.querySelectorAll('#pmDots .pm-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+function orderViaWhatsApp() {
+  const activeBtn = document.querySelector('#pmSizes .pm-size-btn.active');
+  const grams = activeBtn.dataset.grams;
+  const price = parseInt(activeBtn.dataset.price);
+  const label = grams >= 1000 ? (grams / 1000) + 'kg' : grams + 'g';
+  const form = document.querySelector('#pmForm .pm-opt-btn.active').dataset.form;
+  const roast = document.querySelector('#pmRoast .pm-opt-btn.active').dataset.roast;
+  const productName = currentProduct ? currentProduct.name : 'Fullwash';
+  let msg = `Halo Arm Upeksha! 👋\n\n`;
+  msg += `Saya ingin memesan:\n`;
+  msg += `☕ *${productName} Roasted Bean (Arabica)*\n`;
+  msg += `📦 Ukuran: ${label}\n`;
+  msg += `🌾 Bentuk: ${form}\n`;
+  msg += `🔥 Level Roasting: ${roast}\n`;
+  msg += `💰 Harga: Rp${price.toLocaleString('id-ID')}\n\n`;
+  msg += `Mohon info ketersediaan dan cara pemesanannya. Terima kasih! 🙏`;
+  const waNumber = '6285179576019';
+  const url = `https://wa.me/${waNumber}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
 
 // GCD helper
 const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
